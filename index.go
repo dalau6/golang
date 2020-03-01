@@ -1,20 +1,25 @@
-// The following program uses a nested for loop to find the prime numbers from 2 to 100 −
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
-func main() {
-	/* local variable definition */
-	var i, j int
-
-	for i = 2; i < 100; i++ {
-		for j = 2; j <= (i / j); j++ {
-			if i%j == 0 {
-				break // if factor found, not prime
-			}
-		}
-		if j > (i / j) {
-			fmt.Printf("%d is prime\n", i)
-		}
+func numbers() {
+	for i := 1; i <= 5; i++ {
+		time.Sleep(250 * time.Millisecond)
+		fmt.Printf("%d ", i)
 	}
+}
+func alphabets() {
+	for i := 'a'; i <= 'e'; i++ {
+		time.Sleep(400 * time.Millisecond)
+		fmt.Printf("%c ", i)
+	}
+}
+func main() {
+	go numbers()
+	go alphabets()
+	time.Sleep(3000 * time.Millisecond)
+	fmt.Println("main terminated")
 }
