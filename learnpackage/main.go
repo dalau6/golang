@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"learnpackage/simpleinterest" //importing custom package
+	"learnpackage/structs/computer"
 	"log"
-	"structs/computer"
 )
 
 var p, r, t = 5000.0, 10.0, 1.0
