@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"learnpackage/simpleinterest" //importing custom package
 	"log"
+	"structs/computer"
 )
 
 var p, r, t = 5000.0, 10.0, 1.0
@@ -31,6 +32,7 @@ func main() {
 
 	countriesNeeded := countries()
 	fmt.Println(countriesNeeded)
+	structs()
 }
 
 func countries() []string {
@@ -39,4 +41,11 @@ func countries() []string {
 	countriesCpy := make([]string, len(neededCountries))
 	copy(countriesCpy, neededCountries) //copies neededCountries to countriesCpy
 	return countriesCpy
+}
+
+func structs() {
+	var spec computer.Spec
+	spec.Maker = "apple"
+	spec.Price = 50000
+	fmt.Println("Spec:", spec)
 }
