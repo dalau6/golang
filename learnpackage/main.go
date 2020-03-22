@@ -26,6 +26,11 @@ func init() {
 	}
 }
 
+func hello(done chan bool) {
+	fmt.Println("Hello world goroutine")
+	done <- true
+}
+
 func numbers() {
 	for i := 1; i <= 5; i++ {
 		time.Sleep(250 * time.Millisecond)
@@ -47,6 +52,11 @@ func main() {
 	countriesNeeded := countries()
 	fmt.Println(countriesNeeded)
 	structs()
+
+	done := make(chan bool)
+	go hello(done)
+	<-done
+
 	go numbers()
 	go alphabets()
 	time.Sleep(3000 * time.Millisecond)
