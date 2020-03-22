@@ -47,6 +47,7 @@ func calcSquares(number int, squareop chan<- int) {
 		number /= 10
 	}
 	squareop <- sum
+	close(squareop)
 }
 
 func calcCubes(number int, cubeop chan<- int) {
@@ -57,6 +58,7 @@ func calcCubes(number int, cubeop chan<- int) {
 		number /= 10
 	}
 	cubeop <- sum
+	close(cubeop)
 }
 
 func main() {
@@ -73,8 +75,17 @@ func main() {
 	cubech := make(chan int)
 	go calcSquares(number, sqrch)
 	go calcCubes(number, cubech)
-	squares, cubes := <-sqrch, <-cubech
-	fmt.Println("Final output", squares+cubes)
+
+	for {
+		squares, ok := <-sqrch
+		cubes, okay := <-cubech
+		if ok == false && okay == false {
+			// squares, cubes := <-sqrch, <-cubech
+			fmt.Println("Final output", squares+cubes)
+			break
+		}
+		fmt.Println("Received ", squares, cubes)
+	}
 
 	go numbers()
 	go alphabets()
