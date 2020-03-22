@@ -33,6 +33,7 @@ func main() {
 	countriesNeeded := countries()
 	fmt.Println(countriesNeeded)
 	structs()
+	go hello()
 }
 
 func countries() []string {
@@ -48,4 +49,8 @@ func structs() {
 	spec.Maker = "apple"
 	spec.Price = 50000
 	fmt.Println("Spec:", spec)
+}
+
+func hello() {
+	fmt.Println("Hello world goroutine")
 }
