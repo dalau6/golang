@@ -26,11 +26,6 @@ func init() {
 	}
 }
 
-func hello(done chan bool) {
-	fmt.Println("Hello world goroutine")
-	done <- true
-}
-
 func numbers() {
 	for i := 1; i <= 5; i++ {
 		time.Sleep(250 * time.Millisecond)
@@ -44,6 +39,26 @@ func alphabets() {
 	}
 }
 
+func calcSquares(number int, squareop chan<- int) {
+	sum := 0
+	for number != 0 {
+		digit := number % 10
+		sum += digit * digit
+		number /= 10
+	}
+	squareop <- sum
+}
+
+func calcCubes(number int, cubeop chan<- int) {
+	sum := 0
+	for number != 0 {
+		digit := number % 10
+		sum += digit * digit * digit
+		number /= 10
+	}
+	cubeop <- sum
+}
+
 func main() {
 	fmt.Println("Simple interest calculation")
 	si := simpleinterest.Calculate(p, r, t)
@@ -53,9 +68,13 @@ func main() {
 	fmt.Println(countriesNeeded)
 	structs()
 
-	done := make(chan bool)
-	go hello(done)
-	<-done
+	number := 589
+	sqrch := make(chan int)
+	cubech := make(chan int)
+	go calcSquares(number, sqrch)
+	go calcCubes(number, cubech)
+	squares, cubes := <-sqrch, <-cubech
+	fmt.Println("Final output", squares+cubes)
 
 	go numbers()
 	go alphabets()
