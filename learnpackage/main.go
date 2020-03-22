@@ -5,6 +5,7 @@ import (
 	"learnpackage/simpleinterest" //importing custom package
 	"learnpackage/structs/computer"
 	"log"
+	"time"
 )
 
 var p, r, t = 5000.0, 10.0, 1.0
@@ -34,6 +35,8 @@ func main() {
 	fmt.Println(countriesNeeded)
 	structs()
 	go hello()
+	time.Sleep(1 * time.Second)
+	fmt.Println("main function")
 }
 
 func countries() []string {
