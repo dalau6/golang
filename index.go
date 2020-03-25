@@ -30,6 +30,7 @@ func digits(number int) int {
 	time.Sleep(2 * time.Second)
 	return sum
 }
+
 func worker(wg *sync.WaitGroup) {
 	for job := range jobs {
 		output := Result{job, digits(job.randomno)}
@@ -37,6 +38,7 @@ func worker(wg *sync.WaitGroup) {
 	}
 	wg.Done()
 }
+
 func createWorkerPool(noOfWorkers int) {
 	var wg sync.WaitGroup
 	for i := 0; i < noOfWorkers; i++ {
@@ -46,6 +48,7 @@ func createWorkerPool(noOfWorkers int) {
 	wg.Wait()
 	close(results)
 }
+
 func allocate(noOfJobs int) {
 	for i := 0; i < noOfJobs; i++ {
 		randomno := rand.Intn(999)
@@ -54,12 +57,14 @@ func allocate(noOfJobs int) {
 	}
 	close(jobs)
 }
+
 func result(done chan bool) {
 	for result := range results {
 		fmt.Printf("Job id %d, input random no %d , sum of digits %d\n", result.job.id, result.job.randomno, result.sumofdigits)
 	}
 	done <- true
 }
+
 func main() {
 	startTime := time.Now()
 	noOfJobs := 100
