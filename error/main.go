@@ -2,10 +2,30 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"net"
 	"os"
 	"path/filepath"
 )
+
+/*
+	// Package errors implements functions to manipulate errors.
+	package errors
+
+	// New returns an error that formats as the given text.
+	func New(text string) error {
+		return &errorString{text}
+	}
+
+	// errorString is a trivial implementation of error.
+	type errorString struct {
+		s string
+	}
+
+	func (e *errorString) Error() string {
+		return e.s
+	}
+*/
 
 /*
 	It contains a single method with signature Error() string.
@@ -70,8 +90,24 @@ func badpattern() {
 	fmt.Println("matched files", files)
 }
 
+func circleArea(radius float64) (float64, error) {
+	if radius < 0 {
+		return 0, fmt.Errorf("Area calculation failed, radius %0.2f is less than zero", radius)
+	}
+	return math.Pi * radius * radius, nil
+}
+
 func main() {
 	open()
 	lookup()
 	badpattern()
+
+	// custom errors
+	radius := -20.0
+	area, err := circleArea(radius)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("Area of circle %0.2f", area)
 }
