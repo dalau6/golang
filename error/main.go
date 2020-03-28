@@ -107,12 +107,7 @@ func (e *areaError) Error() string {
 	return fmt.Sprintf("radius %0.2f: %s", e.radius, e.err)
 }
 
-func main() {
-	open()
-	lookup()
-	badpattern()
-
-	// custom errors
+func calcCircle() {
 	radius := -20.0
 	area, err := circleArea(radius)
 	if err != nil {
@@ -124,4 +119,71 @@ func main() {
 		return
 	}
 	fmt.Printf("Area of circle %0.2f", area)
+}
+
+type areaRecError struct {
+	err    string  //error description
+	length float64 //length which caused the error
+	width  float64 //width which caused the error
+}
+
+func (e *areaRecError) Error() string {
+	return e.err
+}
+
+func (e *areaRecError) lengthNegative() bool {
+	return e.length < 0
+}
+
+func (e *areaRecError) widthNegative() bool {
+	return e.width < 0
+}
+
+func rectArea(length, width float64) (float64, error) {
+	err := ""
+	if length < 0 {
+		err += "length is less than zero"
+	}
+	if width < 0 {
+		if err == "" {
+			err = "width is less than zero"
+		} else {
+			err += ", width is less than zero"
+		}
+	}
+	if err != "" {
+		return 0, &areaRecError{err, length, width}
+	}
+	return length * width, nil
+}
+
+func calcRec() {
+	length, width := -5.0, -9.0
+	area, err := rectArea(length, width)
+	if err != nil {
+		if err, ok := err.(*areaRecError); ok {
+			if err.lengthNegative() {
+				fmt.Printf("error: length %0.2f is less than zero\n", err.length)
+
+			}
+			if err.widthNegative() {
+				fmt.Printf("error: width %0.2f is less than zero\n", err.width)
+
+			}
+			return
+		}
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("area of rect", area)
+}
+
+func main() {
+	open()
+	lookup()
+	badpattern()
+
+	// custom errors
+	calcCircle()
+	calcRec()
 }
