@@ -8,6 +8,7 @@ import (
 // func panic(interface{})
 
 func fullName(firstName *string, lastName *string) {
+	defer fmt.Println("deferred call in fullName")
 	if firstName == nil {
 		panic("runtime error: first name cannot be nil")
 	}
@@ -19,6 +20,7 @@ func fullName(firstName *string, lastName *string) {
 }
 
 func main() {
+	defer fmt.Println("deferred call in main")
 	firstName := "Elon"
 	fullName(&firstName, nil)
 	fmt.Println("returned normally from main")
