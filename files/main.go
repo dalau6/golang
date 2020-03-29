@@ -1,51 +1,93 @@
 package main
 
 import (
-	"bufio"
-	"flag"
 	"fmt"
-	"log"
 	"os"
-	// "github.com/gobuffalo/packr"
 )
 
-func main() {
-	// box := packr.NewBox("./filehandling") // A box represents a folder whose contents will be embedded in the binary.
-	// data := box.String("test.txt")        // read the contents of the file.
-	// fmt.Println("Contents of file:", data)
-
-	fptr := flag.String("fpath", "test.txt", "file path to read from")
-	flag.Parse()
-
-	f, err := os.Open(*fptr)
+func writeStringBytes() {
+	f, err := os.Create("test.txt")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
-	defer func() {
-		if err = f.Close(); err != nil {
-			log.Fatal(err)
+
+	// writing string to a file
+	l, err := f.WriteString("Hello World")
+	if err != nil {
+		fmt.Println(err)
+		f.Close()
+		return
+	}
+
+	// writing bytes to a file
+	d2 := []byte{104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100}
+	n2, err := f.Write(d2)
+	if err != nil {
+		fmt.Println(err)
+		f.Close()
+		return
+	}
+
+	fmt.Println(l, "bytes written successfully")
+	fmt.Println(n2, "bytes written successfully")
+
+	err = f.Close()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+func writeLines() {
+	f, err := os.Create("lines")
+	if err != nil {
+		fmt.Println(err)
+		f.Close()
+		return
+	}
+	d := []string{"Welcome to the world of Go1.", "Go is a compiled language.", "It is easy to learn Go."}
+
+	for _, v := range d {
+		// use the Fprintln function to write the lines to a file.
+		// The Fprintln function takes a io.writer as parameter and appends a new line
+		fmt.Fprintln(f, v)
+		if err != nil {
+			fmt.Println(err)
+			return
 		}
-	}()
-
-	// Reading a file in small chunks
-	// r := bufio.NewReader(f)
-	// b := make([]byte, 3)
-	// for {
-	// 	n, err := r.Read(b)
-	// 	if err != nil {
-	// 		fmt.Println("Error reading file:", err)
-	// 		break
-	// 	}
-	// 	fmt.Println(string(b[0:n]))
-	// }
-
-	// Reading a file line by line
-	s := bufio.NewScanner(f)
-	for s.Scan() {
-		fmt.Println(s.Text())
 	}
-	err = s.Err()
+	err = f.Close()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
+	fmt.Println("file written successfully")
+}
+
+func appendFile() {
+	f, err := os.OpenFile("lines", os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	newLine := "File handling is easy."
+	_, err = fmt.Fprintln(f, newLine)
+	if err != nil {
+		fmt.Println(err)
+		f.Close()
+		return
+	}
+	err = f.Close()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("file appended successfully")
+}
+
+func main() {
+	writeStringBytes()
+	writeLines()
+	appendFile()
 }
