@@ -26,14 +26,26 @@ func main() {
 			log.Fatal(err)
 		}
 	}()
-	r := bufio.NewReader(f)
-	b := make([]byte, 3)
-	for {
-		n, err := r.Read(b)
-		if err != nil {
-			fmt.Println("Error reading file:", err)
-			break
-		}
-		fmt.Println(string(b[0:n]))
+
+	// Reading a file in small chunks
+	// r := bufio.NewReader(f)
+	// b := make([]byte, 3)
+	// for {
+	// 	n, err := r.Read(b)
+	// 	if err != nil {
+	// 		fmt.Println("Error reading file:", err)
+	// 		break
+	// 	}
+	// 	fmt.Println(string(b[0:n]))
+	// }
+
+	// Reading a file line by line
+	s := bufio.NewScanner(f)
+	for s.Scan() {
+		fmt.Println(s.Text())
+	}
+	err = s.Err()
+	if err != nil {
+		log.Fatal(err)
 	}
 }
